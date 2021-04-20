@@ -1,0 +1,58 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Forecast{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h2>{{cityName}} {{request.form['text']}}|| 5 day PM 2.5 Forecast</h2>
+</div>
+<html>
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['line']});
+      google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Day');
+      data.addColumn('number', 'Average');
+      data.addColumn('number', 'Max');
+      data.addColumn('number', 'Min');
+
+      data.addRows([
+      ['{{pm[0][0]}}',{{pm[0][1]}}, {{pm[0][2]}},  {{pm[0][3]}}],
+      ['{{pm[1][0]}}',{{pm[1][1]}}, {{pm[1][2]}},  {{pm[1][3]}}],
+      ['{{pm[2][0]}}',{{pm[2][1]}}, {{pm[2][2]}},  {{pm[2][3]}}],
+      ['{{pm[3][0]}}',{{pm[3][1]}}, {{pm[3][2]}},  {{pm[3][3]}}],
+      ['{{pm[4][0]}}',{{pm[4][1]}}, {{pm[4][2]}},  {{pm[4][3]}}]
+      ]);
+
+      var options = {
+        chart: {
+          title: 'Particulate Matter 2.5 microMeter',
+          subtitle: 'in ppm'
+        },
+        width: 900,
+        height: 500,
+        axes: {
+          x: {
+            0: {side: 'bottom'}
+          },
+          titleTextStyle: {
+          bold: 'True'}
+        }
+      };
+
+      var chart = new google.charts.Line(document.getElementById('line_top_x'));
+
+      chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+  </script>
+</head>
+<body>
+  <div id="line_top_x"></div>
+</body>
+</html>
+
+{% endblock %}

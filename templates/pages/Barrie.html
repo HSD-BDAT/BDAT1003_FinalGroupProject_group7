@@ -1,0 +1,46 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Barrie{% endblock %}
+{% block content %}
+
+
+<div class="page-header">
+  <h2>{{cityName}} {{request.form['text']}} Air Quality Index: {{aqi}} || Major pollutant: {{MainPollutant}} || {{dateTime}}</h2>
+</div>
+<p class="lead">Key Air Pollutants and Indicators</p>
+<html>
+  <head>
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+   <script type="text/javascript"> 
+      
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+        ['Label', 'Value'],
+        ['AQI', {{aqi}}],
+        ['Humidity %', {{iaqi.iloc[0,0]}}],
+        ['NO2 ppm', {{iaqi.iloc[0,1]}}],
+        ['Ozone ppm', {{iaqi.iloc[0,2]}}],
+        ['PM 2.5 ppm', {{iaqi.iloc[0,4]}}],
+        ['Temp. (C)', {{iaqi.iloc[0,5]}}]
+        ]);
+
+        var options = {
+          width: 800, height: 450
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body> 
+    <div id="chart_div" style="width: 300px; height: 200spx;"></div>
+  </body>
+</html>
+
+{% endblock %}
